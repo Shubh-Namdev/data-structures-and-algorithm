@@ -1,0 +1,211 @@
+import java.io.*;
+import java.security.KeyStore;
+import java.util.*;
+
+class ListNode {
+   public int val;
+   public ListNode next;
+   public ListNode(int x) { val = x; next = null; }
+}
+
+class ReverseSolution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ListNode head = null,s = null;
+        for (int i=0; i<7; i++) {
+            int val = sc.nextInt();
+            ListNode node = new ListNode(val);
+            if (head == null) {
+                head = node;
+                s = node;
+            }else {
+                s.next = node;
+                s = node;
+            }
+        }
+        ListNode temp = head;
+        while (temp != null) {
+            System.out.print(temp.val);
+            temp = temp.next;
+        }
+        ListNode node = partition(head,5);
+    }
+    static boolean isEqual(ListNode n1, ListNode n2) {
+        return n1.next == n2.next;
+    }
+    public static ListNode listIntersectionPoint(ListNode head1, ListNode head2) {
+        ListNode isNode = null;
+        ListNode temp1 = head1,temp2 = head2;
+        while (temp1 != null) {
+            while (temp2 != null) {
+                if (isEqual(temp1,temp2)) {
+                    isNode = temp1.next;
+                    break;
+                }
+                temp2 = temp2.next;
+            }
+            if (isNode != null) break;
+            temp1 = temp1.next;
+        }
+        return isNode;
+    }
+
+    public static ListNode partition( ListNode head , int x) {
+        ListNode sHead = null,s = null;
+        ListNode bHead = null,b = null;
+        ListNode eHead = null,e = null;
+
+        ListNode temp = head;
+        while (temp != null) {
+            if (temp.val < x) {
+                ListNode node = new ListNode(temp.val);
+                if (sHead == null) {
+                    sHead = node;
+                    s = node;
+                }else {
+                    s.next = node;
+                    s = node;
+                }
+            }else if (temp.val > x) {
+
+                ListNode node = new ListNode(temp.val);
+                if (bHead == null) {
+                    bHead = node;
+                    b = node;
+                }else {
+                    b.next = node;
+                    b = node;
+                }
+            }else {
+                ListNode node = new ListNode(temp.val);
+                if (eHead == null) {
+                    eHead = node;
+                    e = node;
+                }else {
+                    e.next = node;
+                    e = node;
+                }
+            }
+            temp = temp.next;
+        }
+
+        s.next = eHead;
+        e.next = bHead;
+
+
+        while(sHead != null) {
+            System.out.print(sHead.val+" ");
+            sHead = sHead.next;
+        }
+        System.out.println();
+
+        return head;
+    }
+
+    public static ListNode sumLists1( ListNode head1 , ListNode head2) {
+        head1 = reverse(head1);
+        head2 = reverse(head2);
+        ListNode head = null;
+
+        int carry = 0;
+        while (head1 != null && head2 != null) {
+            int sum = head1.val + head2.val + carry;
+            int rem = sum % 10;
+            ListNode node = new ListNode(rem);
+
+            if (head == null) {
+                head = node;
+            }else {
+                node.next = head;
+                head = node;
+            }
+
+            head1 = head1.next;
+            head2 = head2.next;
+            carry = sum/10;
+        }
+
+        while (head1 != null) {
+            int sum = head1.val + carry;
+            int rem = sum%10;
+            ListNode node = new ListNode(rem);
+            node.next = head;
+            head = node;
+
+            head1 = head1.next;
+            carry = sum/10;
+        }
+
+        while (head2 != null) {
+            int sum = head2.val + carry;
+            int rem = sum%10;
+            ListNode node = new ListNode(rem);
+            node.next = head;
+            head = node;
+
+            head2 = head2.next;
+            carry = sum/10;
+        }
+
+        if (carry != 0) {
+            ListNode node = new ListNode(carry);
+            node.next = head;
+            head = node;
+        }
+
+        return head;
+    }
+
+    static ListNode reverse(ListNode head) {
+        if (head == null) return head;
+
+        ListNode p = null, c = head, n = c.next;
+        while (n != null) {
+            c.next = p;
+
+            p = c;
+            c = n;
+            n = n.next;
+        }
+        c.next = p;
+        head = c;
+
+        return head;
+    }
+
+
+
+    /*
+    public Node copyRandomList(Node head) {
+        Map<Node, Node> mp = new HashMap<>();
+        Node curr = head;
+
+        // Traverse original linked list to store new nodes
+        // corresponding to original linked list
+        while (curr != null) {
+            mp.put(curr, new Node(curr.val,null,null));
+            curr = curr.next;
+        }
+
+        curr = head;
+
+        // Loop to update the next and random pointers
+        // of new nodes
+        while (curr != null) {
+
+            // Update the next pointer of new node
+            Node newNode = mp.get(curr);
+            newNode.next = mp.get(curr.next);
+
+            // Update the random pointer of new node
+            newNode.random = mp.get(curr.random);
+
+            curr = curr.next;
+        }
+
+        // Return the head of the clone
+        return mp.get(head);
+    }
+
+     */
+}
