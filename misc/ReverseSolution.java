@@ -157,8 +157,7 @@ class ReverseSolution {
     }
 
     static ListNode reverse(ListNode head) {
-        if (head == null) return head;
-
+        if ( head == null) return head;
         ListNode p = null, c = head, n = c.next;
         while (n != null) {
             c.next = p;
@@ -171,6 +170,48 @@ class ReverseSolution {
         head = c;
 
         return head;
+    }
+
+    public ListNode reverseEvenElements(ListNode head){
+        return reverseEven(head,null);
+    }
+
+    static ListNode reverseEven(ListNode head, ListNode prev) {
+        // Base case
+        if (head == null)
+            return null;
+
+        ListNode temp;
+        ListNode curr;
+        curr = head;
+
+        // Reversing nodes until curr node's value
+        // turn odd or Linked list is fully traversed
+        while (curr != null && curr.val % 2 == 0)
+        {
+            temp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = temp;
+        }
+
+        // If elements were reversed then head
+        // pointer needs to be changed
+        if (curr != head)
+        {
+            head.next = curr;
+
+            // Recur for the remaining linked list
+            curr = reverseEven(curr, null);
+            return prev;
+        }
+
+        // Simply iterate over the odd value nodes
+        else
+        {
+            head.next = reverseEven(head.next, head);
+            return head;
+        }
     }
 
 
