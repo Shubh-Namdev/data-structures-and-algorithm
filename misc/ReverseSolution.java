@@ -176,6 +176,54 @@ class ReverseSolution {
         return reverseEven(head,null);
     }
 
+    public boolean detectAndRemoveCycle(ListNode head) {
+        if (head == null) return false;
+
+        ListNode slow = head, fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast) {
+                slow = head;
+                while (slow.next != fast.next) {
+                    slow = slow.next;
+                    fast = fast.next;
+                }
+                fast.next = null;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ListNode oddEvenLinkedList(ListNode head) {
+        ListNode oddHead = new ListNode(Integer.MIN_VALUE);
+        ListNode oddTail = oddHead;
+
+        ListNode evenHead = new ListNode(Integer.MIN_VALUE);
+        ListNode evenTail = evenHead;
+
+        int index = 1;
+        while (head != null) {
+            if (index % 2 == 1) {
+                oddTail.next = head;
+                oddTail = head;
+            }else {
+                evenTail.next = head;
+                evenTail = head;
+            }
+            head = head.next;
+            index++;
+        }
+
+        oddTail.next = evenHead;
+        evenTail.next = null;
+
+        return oddHead;
+    }
+
     static ListNode reverseEven(ListNode head, ListNode prev) {
         // Base case
         if (head == null)
